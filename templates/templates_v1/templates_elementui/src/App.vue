@@ -1,19 +1,21 @@
 <template>
   <div id="app">
-    <EirRoot />
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
-import EirRoot from './components/eir_root.vue'
 
 export default {
   name: 'App',
   components: {
-    EirRoot
   }
 }
 </script>
 
 <style>
+  * {
+    margin: 0;
+    padding: 0;
+  }
 </style>
