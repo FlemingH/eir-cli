@@ -6,6 +6,9 @@ import App from './App.vue'
 import VueRouter from 'vue-router'
 import router from './router'
 
+import globalVue from './global.vue'
+Vue.prototype.global = globalVue
+
 Vue.config.productionTip = false
 
 Vue.use(ElementUI);
