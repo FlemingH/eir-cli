@@ -22,6 +22,11 @@
                         "keyPath": "page",
                         "unique": false,
                     },
+                    {
+                        "name": "activited",
+                        "keyPath": "activited",
+                        "unique": false,
+                    },
                 ],
                 "autoIncrement": true,
                 "isKv": false

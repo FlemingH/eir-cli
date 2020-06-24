@@ -40,7 +40,8 @@ export default {
                 } else {
                     this.$router.push({name:'em', params: {
                         username: user_obj.username,
-                        page: user_obj.page
+                        page: user_obj.page,
+                        activited: user_obj.activited,
                     }});
                 }
             } else {
@@ -66,6 +67,7 @@ export default {
                     "username": this.usernameInputValue,
                     "password": this.passwordInputValue,
                     "page": "[]",
+                    "activited": "0",
                 });
 
                 this.$message({
