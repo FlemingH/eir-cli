@@ -38,7 +38,10 @@ export default {
                         type: 'warning'
                     });
                 } else {
-                    this.$router.push('/')
+                    this.$router.push({name:'em', params: {
+                        username: user_obj.username,
+                        page: user_obj.page
+                    }});
                 }
             } else {
                 this.$message({
