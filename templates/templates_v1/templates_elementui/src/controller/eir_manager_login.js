@@ -39,6 +39,7 @@ export default {
                     });
                 } else {
                     this.$router.push({name:'em', params: {
+                        id: user_obj.id,
                         username: user_obj.username,
                         page: user_obj.page,
                         activited: user_obj.activited,
@@ -82,12 +83,6 @@ export default {
                 });
                 console.log(e);
             }
-        },
-        async putUser(store, userObj) {
-            await store.put(userObj);
-        },
-        async findUserByUsername(store, username) {
-            return await store.find("username", username);
         },
         button1OnClick() {
             
