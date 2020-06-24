@@ -16,6 +16,7 @@ export default {
             passwordInputValue: "",
 
             eirDb: null,
+            eirUser: null,
         }
     },
     watch: {
@@ -23,12 +24,65 @@ export default {
     methods: {
         init() {
             this.eirDb = new InDB(this.global.db_options);
+            this.eirUser = this.eirDb.use("eir_user");
         },
-        loginOnClick() {
+        async loginOnClick() {
 
+            var user_obj = await this.eirUser.find("username", this.usernameInputValue);
+
+            if (user_obj && Object.keys(user_obj).length > 0) {
+
+                if (user_obj.password != this.passwordInputValue) {
+                    this.$message({
+                        message: 'Username or password not correct',
+                        type: 'warning'
+                    });
+                } else {
+                    this.$router.push('/')
+                }
+            } else {
+                this.$message({
+                    message: 'User not exists',
+                    type: 'warning'
+                });
+            }
         },
-        createUserOnClick() {
+        async createUserOnClick() {
 
+            var user_obj = await this.eirUser.find("username", this.usernameInputValue);
+            if (user_obj && Object.keys(user_obj).length > 0) {
+                this.$message({
+                    message: 'User already exists',
+                    type: 'warning'
+                });
+                return;
+            }
+
+            try {
+                this.eirUser.put({
+                    "username": this.usernameInputValue,
+                    "password": this.passwordInputValue,
+                    "page": "[]",
+                });
+
+                this.$message({
+                    message: 'Create user success',
+                    type: 'success'
+                });
+            } catch (e) {
+
+                this.$message({
+                    message: 'Create user fail',
+                    type: 'error'
+                });
+                console.log(e);
+            }
+        },
+        async putUser(store, userObj) {
+            await store.put(userObj);
+        },
+        async findUserByUsername(store, username) {
+            return await store.find("username", username);
         },
         button1OnClick() {
             
