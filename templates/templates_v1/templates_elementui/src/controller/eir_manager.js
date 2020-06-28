@@ -10,6 +10,11 @@ export default {
         return {
             curActivatedUsername: "",
 
+            urlData: [],
+            showUrlDialog: false,
+            urlNameInputValue: "",
+            urlInputValue: "",
+
             eirDb: null,
             eirUser: null,
         }
@@ -29,6 +34,8 @@ export default {
 
             this.eirDb = new InDB(this.global.db_options);
             this.eirUser = this.eirDb.use("eir_user");
+
+            this.urlData = JSON.parse(sessionStorage.getItem("page"));
 
             this.getCurActivatedUser();
         },
@@ -74,8 +81,117 @@ export default {
                 });
             }
 
+            this.$message({
+                message: 'Activated User Success',
+                type: 'success'
+            });
+
             this.getCurActivatedUser();
         },
+
+        newBindingOnClick() {
+            this.urlNameInputValue = "";
+            this.urlInputValue = "";
+            this.showUrlDialog = true;
+        },
+        urlDeleteOnClick(row) {
+
+            var pageArray = JSON.parse(sessionStorage.getItem("page"));
+
+            for (var i = 0; i < pageArray.length; i++) {
+                if (pageArray[i].urlName == row.urlName) {
+                    pageArray.splice(i, 1);
+                }
+            }
+
+            var self = this;
+
+            this.$confirm('Sure about delete this binding', 'Warning', {
+                confirmButtonText: 'Confirm',
+                cancelButtonText: 'Cancel',
+                type: 'warning'
+            }).then(() => {
+                self.updateUrlData(pageArray);
+
+                self.$message({
+                    message: 'Delete Url Binding Success',
+                    type: 'success'
+                });
+            }).catch(() => {
+            });
+        },
+        urlUpdateOnClick(row) {
+            console.log(row);
+        },
+        urlEnableOnClick(row) {
+            console.log(row);
+        },
+
+        confirmUpdateUrl() {
+
+            if (!this.urlNameInputValue) {
+                this.$message({
+                    message: 'Please input the url name',
+                    type: 'warning'
+                });
+                return;
+            }
+
+            if (!this.urlInputValue) {
+                this.$message({
+                    message: 'Please input the url',
+                    type: 'warning'
+                });
+                return;
+            }
+            
+            this.updatePageUrl();
+        },
+        updatePageUrl() {
+
+            var pageArray = JSON.parse(sessionStorage.getItem("page"));
+            for (var page of pageArray) {
+
+                if (page.urlName == this.urlNameInputValue) {
+                    this.$message({
+                        message: 'Url Name exists',
+                        type: 'warning'
+                    });
+                    return;
+                }
+            }
+
+            var pageObj = {
+                "urlName": this.urlNameInputValue,
+                "url": this.urlInputValue,
+                "enable": true,
+            }
+            pageArray.push(pageObj);
+
+            this.updateUrlData(pageArray);
+
+            this.$message({
+                message: 'New Url Binding Success',
+                type: 'success'
+            });
+            
+            this.showUrlDialog = false;
+        },
+        async updateUrlData(pageArray) {
+
+            sessionStorage.setItem("page", JSON.stringify(pageArray));
+ 
+            var user = await this.eirUser.find('username', sessionStorage.getItem("username"))
+            this.eirUser.put({
+                "id": parseInt(sessionStorage.getItem("id")),
+                "username": sessionStorage.getItem("username"),
+                "password": user.password,
+                "page": sessionStorage.getItem("page"),
+                "activited": sessionStorage.getItem("activited"),
+            });
+
+            this.urlData = JSON.parse(sessionStorage.getItem("page"));
+        }
     },
     mounted: function() {
         this.init();
