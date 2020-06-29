@@ -130,8 +130,31 @@ export default {
             this.createOrUpdate = 1;
             this.curUpdateIndex = index;
         },
-        urlEnableOnClick(row) {
-            console.log(row);
+        urlEnableOnClick(index) {
+
+            var self = this;
+
+            this.$confirm('Sure about enable this binding', 'Warning', {
+                confirmButtonText: 'Confirm',
+                cancelButtonText: 'Cancel',
+                type: 'warning'
+            }).then(() => {
+                self.enableUrl(index);
+            }).catch(() => {
+            });
+        },
+        urlDisableOnClick(index) {
+
+            var self = this;
+
+            this.$confirm('Sure about disable this binding', 'Warning', {
+                confirmButtonText: 'Confirm',
+                cancelButtonText: 'Cancel',
+                type: 'warning'
+            }).then(() => {
+                self.disableUrl(index);
+            }).catch(() => {
+            });
         },
 
         confirmUpdateUrl() {
@@ -190,6 +213,30 @@ export default {
             });
             
             this.showUrlDialog = false;
+        },
+        disableUrl(index) {
+
+            var pageArray = JSON.parse(sessionStorage.getItem("page"));
+            pageArray[index].enable = false;
+
+            this.updateUrlData(pageArray);
+
+            this.$message({
+                message: 'Disable url success',
+                type: 'success'
+            });
+        },
+        enableUrl(index) {
+
+            var pageArray = JSON.parse(sessionStorage.getItem("page"));
+            pageArray[index].enable = true;
+
+            this.updateUrlData(pageArray);
+
+            this.$message({
+                message: 'Enables url success',
+                type: 'success'
+            });
         },
         async updateUrlData(pageArray) {
 

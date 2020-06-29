@@ -36,7 +36,10 @@
           <template slot-scope="scope">
             <i class="el-icon-delete urlOperaIcon" @click="urlDeleteOnClick(scope.row)"></i>
             <i class="el-icon-edit urlOperaIcon" @click="urlUpdateOnClick(scope.row, scope.$index)"></i>
-            <i class="el-icon-switch-button urlOperaIcon" @click="urlEnableOnClick(scope.row)"></i>
+            <i class="el-icon-switch-button urlOperaIcon" v-show="scope.row.enable == true"
+              @click="urlDisableOnClick(scope.$index)"></i>
+            <i class="el-icon-video-play urlOperaIcon" v-show="scope.row.enable == false"
+              @click="urlEnableOnClick(scope.$index)"></i>
           </template>
         </el-table-column>
       </el-table>

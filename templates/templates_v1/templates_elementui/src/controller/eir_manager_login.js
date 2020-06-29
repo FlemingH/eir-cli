@@ -57,7 +57,7 @@ export default {
             var user_obj = await this.eirUser.find("username", this.usernameInputValue);
             if (user_obj && Object.keys(user_obj).length > 0) {
                 this.$message({
-                    message: 'User already exists',
+                    message: 'User already escope.$index)sxists',
                     type: 'warning'
                 });
                 return;
