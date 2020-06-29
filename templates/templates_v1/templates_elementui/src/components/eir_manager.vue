@@ -35,15 +35,15 @@
           width="150">
           <template slot-scope="scope">
             <i class="el-icon-delete urlOperaIcon" @click="urlDeleteOnClick(scope.row)"></i>
-            <i class="el-icon-edit urlOperaIcon" @click="urlUpdateOnClick(scope.row)"></i>
-            <i class="el-icon-open urlOperaIcon" @click="urlEnableOnClick(scope.row)"></i>
+            <i class="el-icon-edit urlOperaIcon" @click="urlUpdateOnClick(scope.row, scope.$index)"></i>
+            <i class="el-icon-switch-button urlOperaIcon" @click="urlEnableOnClick(scope.row)"></i>
           </template>
         </el-table-column>
       </el-table>
 
     </div>
 
-    <el-dialog title="Create Url" :visible.sync="showUrlDialog" width="600px">
+    <el-dialog :title="createOrUpdate==0? 'Create Url':'Update Url'" :visible.sync="showUrlDialog" width="600px">
       <el-form>
 
         <div class="inputBox">

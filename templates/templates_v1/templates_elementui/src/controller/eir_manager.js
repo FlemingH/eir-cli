@@ -14,6 +14,8 @@ export default {
             showUrlDialog: false,
             urlNameInputValue: "",
             urlInputValue: "",
+            createOrUpdate: 0,
+            curUpdateIndex: 0,
 
             eirDb: null,
             eirUser: null,
@@ -93,6 +95,7 @@ export default {
             this.urlNameInputValue = "";
             this.urlInputValue = "";
             this.showUrlDialog = true;
+            this.createOrUpdate = 0;
         },
         urlDeleteOnClick(row) {
 
@@ -120,8 +123,12 @@ export default {
             }).catch(() => {
             });
         },
-        urlUpdateOnClick(row) {
-            console.log(row);
+        urlUpdateOnClick(row, index) {
+            this.urlNameInputValue = row.urlName;
+            this.urlInputValue = row.url;
+            this.showUrlDialog = true;
+            this.createOrUpdate = 1;
+            this.curUpdateIndex = index;
         },
         urlEnableOnClick(row) {
             console.log(row);
@@ -150,28 +157,35 @@ export default {
         updatePageUrl() {
 
             var pageArray = JSON.parse(sessionStorage.getItem("page"));
-            for (var page of pageArray) {
 
-                if (page.urlName == this.urlNameInputValue) {
-                    this.$message({
-                        message: 'Url Name exists',
-                        type: 'warning'
-                    });
-                    return;
+            if (this.createOrUpdate == 0) {
+
+                for (var page of pageArray) {
+
+                    if (page.urlName == this.urlNameInputValue) {
+                        this.$message({
+                            message: 'Url Name exists',
+                            type: 'warning'
+                        });
+                        return;
+                    }
                 }
-            }
 
-            var pageObj = {
-                "urlName": this.urlNameInputValue,
-                "url": this.urlInputValue,
-                "enable": true,
+                var pageObj = {
+                    "urlName": this.urlNameInputValue,
+                    "url": this.urlInputValue,
+                    "enable": true,
+                }
+                pageArray.push(pageObj);
+            } else {
+                pageArray[this.curUpdateIndex].urlName = this.urlNameInputValue;
+                pageArray[this.curUpdateIndex].url = this.urlInputValue;
             }
-            pageArray.push(pageObj);
 
             this.updateUrlData(pageArray);
 
             this.$message({
-                message: 'New Url Binding Success',
+                message: this.createOrUpdate==0? 'New':'Update' + ' Url Binding Success',
                 type: 'success'
             });
             
