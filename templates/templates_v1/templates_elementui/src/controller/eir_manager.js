@@ -83,6 +83,8 @@ export default {
                 });
             }
 
+            sessionStorage.setItem("activited", "1");
+
             this.$message({
                 message: 'Activated User Success',
                 type: 'success'
