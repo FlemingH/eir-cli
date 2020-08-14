@@ -26,6 +26,9 @@ export default {
             var curActivatedUser = await this.eirUser.find('activited', "1");
             this.curActivatedUserPage = JSON.parse(curActivatedUser["page"]);
         },
+        sideBarItemOnClick(key) {
+            console.log(key);
+        }
     },
     mounted: function() {
         this.init();
